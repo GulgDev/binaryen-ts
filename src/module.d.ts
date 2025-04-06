@@ -356,7 +356,7 @@ export class Module {
         store32_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
         store64_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
         store(offset: number, align: number, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
-        const(i8s: [number, number, number, number, number, number, number, number]): BinaryenExpressionRef;
+        const(i8s: [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number]): BinaryenExpressionRef;
         not(value: BinaryenExpressionRef): BinaryenExpressionRef;
         any_true(value: BinaryenExpressionRef): BinaryenExpressionRef;
         and(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;

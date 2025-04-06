@@ -39,8 +39,7 @@ function compare(prefix: string, js: Map<string, unknown>, types: Map<string, Sy
     });
     types.forEach((type, name) => {
         if (!js.has(name)) {
-            const declaration = type.getValueDeclaration();
-            if (declaration) {
+            for (const declaration of type.getDeclarations()) {
                 for (const range of declaration.getLeadingCommentRanges())
                     if (range.getText().includes("@binaryen-ts"))
                         return;

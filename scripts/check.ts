@@ -1,6 +1,25 @@
-import { Project, Symbol } from "ts-morph";
+import { type Symbol, Project } from "ts-morph";
 import path from "path";
-import binaryen from "../src/binaryen";
+import { program } from "commander";
+
+program
+    .nameFromFilename(import.meta.filename)
+    .description("Perform checks to find missing or redundant types");
+
+program
+    .argument("[filters...]");
+
+program.parse();
+
+let test: RegExp | undefined;
+
+if (program.args.length > 0)
+    test = new RegExp(
+        program.args
+            .map((filter) =>
+                `^${filter.replaceAll(/([.+\-\?\[\]()])/g, "\\$1").replaceAll("**", ".+").replaceAll("*", "[^.]+")}$`)
+            .join("|")
+    );
 
 const IGNORE = /^_|^HEAP[UF]?(8|16|32|64)$|^dynCall_[vij]+$|^stringTo(Ascii|UTF8OnStack)$|^calledRun$/;
 
@@ -21,30 +40,33 @@ const typedExports = getSymbolMap(file.getExportSymbols().map((symbol) => symbol
 
 console.log(`Loading binaryen...`);
 
+const { default: binaryen } = await import("../src/binaryen");
 const binaryenExports = new Map(Object.entries(binaryen));
 
 console.log(`Checking...`);
 
-let missingTypes = 0, redundantTypes = 0, numWarnings = 0;
+let missingTypes = 0, redundantTypes = 0;
 
 function compare(prefix: string, js: Map<string, unknown>, types: Map<string, Symbol>) {
     js.forEach((value, name) => {
         if (IGNORE.test(name)) return;
         if (!types.has(name)) {
-            console.error(`Type not found: ${prefix}.${name}`);
+            if (test && !test.test(`${prefix}${name}`)) return;
+            console.error(`Type not found: ${prefix}${name}`);
             ++missingTypes;
         } else if (value && typeof value === "object") {
-            compare(prefix + "." + name, new Map(Object.entries(value)), getSymbolMap(types.get(name)!.getDeclaredType().getProperties()));
+            compare(`${prefix}${name}.`, new Map(Object.entries(value)), getSymbolMap(types.get(name)!.getDeclaredType().getProperties()));
         }
     });
     types.forEach((type, name) => {
         if (!js.has(name)) {
+            if (test && !test.test(`${prefix}${name}`)) return;
             for (const declaration of type.getDeclarations()) {
                 for (const range of declaration.getLeadingCommentRanges())
                     if (range.getText().includes("@binaryen-ts"))
                         return;
             }
-            console.warn(`Found redundant type: ${prefix}.${name}`);
+            console.warn(`Found redundant type: ${prefix}${name}`);
             ++redundantTypes;
         }
     });
@@ -52,18 +74,18 @@ function compare(prefix: string, js: Map<string, unknown>, types: Map<string, Sy
 
 function compareClass(name: string, prototype: any, clazz: any) {
     if (typedExports.has(name)) {
-        compare("binaryen." + name,
+        compare(`${name}.`,
             new Map(Object.entries(clazz)),
             getSymbolMap(typedExports.get(name)!.getExports().filter((symbol) => symbol.getName() !== "prototype"))
         );
-        compare("binaryen." + name + ".prototype",
+        compare(`${name}.prototype.`,
             new Map(Object.entries(prototype)),
             getSymbolMap(typedExports.get(name)!.getMembers())
         );
     }
 }
 
-compare("binaryen", binaryenExports, typedExports);
+compare("", binaryenExports, typedExports);
 
 const module = new binaryen.Module();
 const expr = module.unreachable();
@@ -80,11 +102,14 @@ compareClass("Function", new binaryen.Function(
     module.addFunction("nop", binaryen.none, binaryen.none, [], expr)
 ), binaryen.Function);
 
-console.log(`Done! (Found ${missingTypes} missing and ${redundantTypes} redundant types, generated ${numWarnings} warnings)`);
+const message = missingTypes > 0 || redundantTypes > 0 ?
+                    `(Found ${missingTypes} missing and ${redundantTypes} redundant types)` :
+                    `(No errors)`;
+console.log(`Done! ${message}`);
 
 if (missingTypes > 0)
     process.exit(-1);
-else if (redundantTypes > 0 || numWarnings > 0)
+else if (redundantTypes > 0)
     process.exit(1);
 else
     process.exit(0);

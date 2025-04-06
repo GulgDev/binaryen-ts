@@ -330,7 +330,26 @@ export class Module {
         ge(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
         pop(): BinaryenExpressionRef;
     };
-    // TODO: v128.*, i*x*.*, f*x*.*
+    v128: {
+        load(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load8_splat(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load16_splat(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load32_splat(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load64_splat(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load8x8_s(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load8x8_u(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load16x4_s(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load16x4_u(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load32x2_s(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load32x2_u(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load32_zero(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load64_zero(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load8_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load16_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load32_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load64_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+    };
+    // TODO: i*x*.*, f*x*.*
     funcref: {
         pop(): BinaryenExpressionRef;
     };
@@ -383,3 +402,5 @@ export class Module {
     // TODO: array.*
     // TODO: string.*
 }
+
+export let wrapModule: void;

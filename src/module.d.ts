@@ -16,8 +16,11 @@ export class Module {
     switch(names: string[], defaultName: string, condition: BinaryenExpressionRef, value?: BinaryenExpressionRef): BinaryenExpressionRef;
     call(name: string, operands: BinaryenExpressionRef[], type: BinaryenType): BinaryenExpressionRef;
     call_indirect(table: string, target: BinaryenExpressionRef, operands: BinaryenExpressionRef[], params: BinaryenType, results: BinaryenType): BinaryenExpressionRef;
+    callIndirect: void;
     return_call(name: string, operands: BinaryenExpressionRef[], type: BinaryenType): BinaryenExpressionRef;
+    returnCall: void;
     return_call_indirect(table: string, target: BinaryenExpressionRef, operands: BinaryenExpressionRef[], params: BinaryenType, results: BinaryenType): BinaryenExpressionRef;
+    returnCallIndirect: void;
     local: {
         get(name: string, type: BinaryenType): BinaryenExpressionRef;
         set(name: string, value: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -344,10 +347,24 @@ export class Module {
         load32x2_u(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
         load32_zero(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
         load64_zero(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
-        load8_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
-        load16_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
-        load32_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
-        load64_lane(offset: number, align: number, ptr: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load8_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load16_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load32_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        load64_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        store8_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        store16_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        store32_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        store64_lane(offset: number, align: number, index: number, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        store(offset: number, align: number, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, name?: string): BinaryenExpressionRef;
+        const(i8s: [number, number, number, number, number, number, number, number]): BinaryenExpressionRef;
+        not(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        any_true(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        and(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
+        or(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
+        xor(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
+        andnot(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
+        bitselect(left: BinaryenExpressionRef, right: BinaryenExpressionRef, cond: BinaryenExpressionRef): BinaryenExpressionRef;
+        pop(): BinaryenExpressionRef;
     };
     // TODO: i*x*.*, f*x*.*
     funcref: {

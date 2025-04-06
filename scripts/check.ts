@@ -55,7 +55,7 @@ function compare(prefix: string, js: Map<string, unknown>, types: Map<string, Sy
             console.error(`Type not found: ${prefix}${name}`);
             ++missingTypes;
         } else if (value && typeof value === "object") {
-            compare(`${prefix}${name}.`, new Map(Object.entries(value)), getSymbolMap(types.get(name)!.getDeclaredType().getProperties()));
+            compare(`${prefix}${name}.`, new Map(Object.entries(value)), getSymbolMap(types.get(name)!.getValueDeclaration()!.getType().getProperties()));
         }
     });
     types.forEach((type, name) => {

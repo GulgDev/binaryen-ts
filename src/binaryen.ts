@@ -1,0 +1,1 @@
+export { default } from "../binaryen/bin/binaryen_js";

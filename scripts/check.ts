@@ -51,11 +51,18 @@ function compare(prefix: string, js: Map<string, unknown>, types: Map<string, Sy
     js.forEach((value, name) => {
         if (IGNORE.test(name)) return;
         if (!types.has(name)) {
-            if (test && !test.test(`${prefix}${name}`)) return;
-            console.error(`Type not found: ${prefix}${name}`);
-            ++missingTypes;
-        } else if (value && typeof value === "object") {
-            compare(`${prefix}${name}.`, new Map(Object.entries(value)), getSymbolMap(types.get(name)!.getValueDeclaration()!.getType().getProperties()));
+            if (!test || test.test(`${prefix}${name}`)) {
+                console.error(`Type not found: ${prefix}${name}`);
+                ++missingTypes;
+            }
+        }
+        if (value && typeof value === "object") {
+            compare(`${prefix}${name}.`,
+                new Map(Object.entries(value)),
+                types.has(name) ?
+                    getSymbolMap(types.get(name)!.getValueDeclaration()!.getType().getProperties()) :
+                    new Map()
+            );
         }
     });
     types.forEach((type, name) => {
@@ -81,6 +88,15 @@ function compareClass(name: string, prototype: any, clazz: any) {
         compare(`${name}.prototype.`,
             new Map(Object.entries(prototype)),
             getSymbolMap(typedExports.get(name)!.getMembers())
+        );
+    } else {
+        compare(`${name}.`,
+            new Map(Object.entries(clazz)),
+            new Map()
+        );
+        compare(`${name}.prototype.`,
+            new Map(Object.entries(prototype)),
+            new Map()
         );
     }
 }

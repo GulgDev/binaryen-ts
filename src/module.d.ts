@@ -82,8 +82,8 @@ export class Module {
             f64(value: BinaryenExpressionRef): BinaryenExpressionRef;
         };
         reinterpret(value: BinaryenExpressionRef): BinaryenExpressionRef;
-        extend_8s(value: BinaryenExpressionRef): BinaryenExpressionRef;
-        extend_16s(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        extend8_s(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        extend16_s(value: BinaryenExpressionRef): BinaryenExpressionRef;
         wrap(value: BinaryenExpressionRef): BinaryenExpressionRef;
         add(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
         sub(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -181,9 +181,9 @@ export class Module {
             f64(value: BinaryenExpressionRef): BinaryenExpressionRef;
         };
         reinterpret(value: BinaryenExpressionRef): BinaryenExpressionRef;
-        extend_8s(value: BinaryenExpressionRef): BinaryenExpressionRef;
-        extend_16s(value: BinaryenExpressionRef): BinaryenExpressionRef;
-        extend_32s(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        extend8_s(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        extend16_s(value: BinaryenExpressionRef): BinaryenExpressionRef;
+        extend32_s(value: BinaryenExpressionRef): BinaryenExpressionRef;
         extend_s(value: BinaryenExpressionRef): BinaryenExpressionRef;
         extend_u(value: BinaryenExpressionRef): BinaryenExpressionRef;
         add(left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;

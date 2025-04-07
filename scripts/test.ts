@@ -18,4 +18,8 @@ project.addSourceFilesAtPaths([
 ]);
 const diagnostics = project.getPreEmitDiagnostics();
 console.log(project.formatDiagnosticsWithColorAndContext(diagnostics));
-process.exit(diagnostics.length === 0 ? 0 : -1);
+if (diagnostics.length > 0)
+    process.exit(-1);
+
+const result = project.emitToMemory();
+// console.log(result.getFiles());

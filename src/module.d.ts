@@ -47,14 +47,11 @@ export interface MemorySegmentInfo {
     offset: number;
 }
 
-// @binaryen-ts
-export enum BinaryenFeatures {
-    // These features are intended to those documented in tool-conventions:
-    // https://github.com/WebAssembly/tool-conventions/blob/main/Linking.md#target-features-section
-    None = 0,
+export enum Features {
+    MVP = 0,
     Atomics = 1 << 0,
     MutableGlobals = 1 << 1,
-    TruncSat = 1 << 2,
+    NontrappingFPToInt = 1 << 2,
     SIMD = 1 << 3,
     BulkMemory = 1 << 4,
     SignExt = 1 << 5,
@@ -71,16 +68,8 @@ export enum BinaryenFeatures {
     StackSwitching = 1 << 16,
     SharedEverything = 1 << 17,
     FP16 = 1 << 18,
-    BulkMemoryOpt = 1 << 19, // Just the memory.copy and fill operations
-    // This features is a no-op for compatibility. Having it in this list means
-    // that we can automatically generate tool flags that set it, but otherwise
-    // it does nothing. Binaryen always accepts LEB call-indirect encodings.
+    BulkMemoryOpt = 1 << 19,
     CallIndirectOverlong = 1 << 20,
-    CustomDescriptors = 1 << 21,
-    MVP = None,
-    // Keep in sync with llvm default features:
-    // https://github.com/llvm/llvm-project/blob/c7576cb89d6c95f03968076e902d3adfd1996577/clang/lib/Basic/Targets/WebAssembly.cpp#L150-L153
-    Default = SignExt | MutableGlobals,
     All = (1 << 22) - 1,
 }
 
@@ -935,8 +924,8 @@ export class Module {
     getMemorySegmentInfo(name: string): MemorySegmentInfo;
     setStart(start: string): void;
     getStart(): BinaryenFunctionRef;
-    getFeatures(): BinaryenFeatures;
-    setFeatures(features: BinaryenFeatures): void;
+    getFeatures(): Features;
+    setFeatures(features: Features): void;
     addCustomSection(name: string, contents: ArrayLike<number>): void;
     getExport(externalName: string): BinaryenExportRef;
     getNumExports(): number;

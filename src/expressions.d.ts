@@ -1,2 +1,2 @@
 declare const __BinaryenExpressionRef: unique symbol;
-export type BinaryenExpressionRef = number & { [__BinaryenExpressionRef]: void };
+/* @binaryen-ts */ export type BinaryenExpressionRef = number & { [__BinaryenExpressionRef]: void };

@@ -36,7 +36,7 @@ console.log(`Loading ${index_dts}...`);
 const project = new Project();
 const file = project.addSourceFileAtPath(index_dts);
 
-const typedExports = getSymbolMap(file.getExportSymbols().map((symbol) => symbol.getAliasedSymbol()!));
+const typedExports = new Map(file.getExportSymbols().map((symbol) => [symbol.getName(), symbol.getAliasedSymbol()!]));
 
 console.log(`Loading binaryen...`);
 

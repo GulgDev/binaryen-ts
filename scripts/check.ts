@@ -60,7 +60,7 @@ function compare(prefix: string, js: Map<string, unknown>, types: Map<string, Sy
             compare(`${prefix}${name}.`,
                 new Map(Object.entries(value)),
                 types.has(name) ?
-                    getSymbolMap(types.get(name)!.getValueDeclaration()!.getType().getProperties()) :
+                    getSymbolMap(types.get(name)!.getExports()) :
                     new Map()
             );
         }
@@ -87,7 +87,7 @@ function compareClass(name: string, prototype: any, clazz: any) {
         );
         compare(`${name}.prototype.`,
             new Map(Object.entries(prototype)),
-            getSymbolMap(typedExports.get(name)!.getMembers())
+            getSymbolMap(typedExports.get(name)!.getDeclaredType().getProperties())
         );
     } else {
         compare(`${name}.`,

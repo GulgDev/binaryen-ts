@@ -1,5 +1,8 @@
 import binaryen from "./binaryen";
 
 export let {
-    ExpressionIds
+    ExpressionIds,
+    getExpressionId,
+    getExpressionType,
+    getExpressionInfo
 } = binaryen;

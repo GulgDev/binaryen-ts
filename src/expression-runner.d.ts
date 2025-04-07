@@ -4,6 +4,13 @@ import { Module } from "./module";
 declare const __ExpressionRunnerRef: unique symbol;
 /* @binaryen-ts */ export type ExpressionRunnerRef = number & { [__ExpressionRunnerRef]: void };
 
+export namespace ExpressionRunner {
+    export enum Flags {
+        Default = 0,
+        PreserveSideeffects = 1 << 0
+    }
+}
+
 export class ExpressionRunner {
     readonly ptr: ExpressionRunnerRef;
 

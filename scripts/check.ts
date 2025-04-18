@@ -109,11 +109,9 @@ compareClass("Module", module, binaryen.Module);
 compareClass("Relooper", new binaryen.Relooper(module), binaryen.Relooper);
 compareClass("ExpressionRunner", new binaryen.ExpressionRunner(module), binaryen.ExpressionRunner);
 compareClass("Expression", new binaryen.Expression(expr), binaryen.Expression);
-for (let name in binaryen.ExpressionIds) {
-    name = name.replace(/Id$/, "");
+for (const name in binaryen.ExpressionIds)
     if (name in binaryen)
         compareClass(name, new binaryen[name](expr), binaryen[name]);
-}
 compareClass("Function", new binaryen.Function(
     module.addFunction("nop", binaryen.none, binaryen.none, [], expr)
 ), binaryen.Function);
